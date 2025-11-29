@@ -1,13 +1,20 @@
-import random
 import sys
+from . import room
 
 class Player:
     def __init__(self, name):
         self.name = name
-        self.health = 10
-        self.damage = 1
-        self.gold = 0
+        self.weapon = ("Rusty dagger", 1)
+        self.armor = ("", 0)
         self.inventory = ["Rusty dagger"]
+        self.gold = 0
+
+        self.max_health = (10 + self.armor[1])
+        self.health = self.max_health
+        self.damage = self.weapon[1]
+        
+        
+        self.current_room = room.start_room
 
     
     def strike(self, enemy):
@@ -63,7 +70,6 @@ class Player:
             self.death()
         
 
-
     def check_inventory(self):
         print(f'\n{self.name}\'s inventory: ')
         for item in self.inventory:
@@ -74,27 +80,46 @@ class Player:
     def death(self):
         print("You have died!")
         if self.gold > 1:
-            print(f'* Your {self.gold} coins spill out across the dungeon floor *')
+            print(f'Your {self.gold} coins spill out across the dungeon floor')
         if self.gold == 1:
-            print(f' * Your one measly coin clanks out across the dungeon floor *')
+            print(f'Your one measly coin clanks out across the dungeon floor')
         if self.gold < 1:
-            print("* Skeletons surround you and laugh at your pathetic, penniless corpse *")
+            print("Skeletons surround you and laugh at your pathetic, penniless corpse")
         sys.exit()
+    
+    def explore(self):
+        output = ""
+        for x in self.current_room.directions.keys():
+            output += f'- {x}\n'
+        return output
+    
+    def heal(self):
+        self.health = self.max_health
+    
+    def update_weapon(self, new_weapon):
+        self.inventory.remove(self.weapon[0])
+        self.weapon = new_weapon
+        self.damage = self.weapon[1]
+        self.inventory.insert(0, self.weapon[0])
+        print(f'\nYour damage increased to {self.damage}!\n')
+
+    def update_armor(self, new_armor):
+        if self.armor in self.inventory:
+            self.inventory.remove(self.armor[0])
+        self.health += (new_armor[1] - self.armor[1])
+        self.armor = new_armor
+        self.inventory.insert(1, self.armor[0])
+        self.max_health = (10 + self.armor[1])
+        
+        print(f'\nYour max health increased to {self.max_health}!')
+        print(f'You curently have {self.health}/{self.max_health} health\n')
+
+    def add_inventory(self, item):
+        self.inventory.append(item)
+
+    
 
 
-class Enemy:
-    def __init__(self):
-        self.health = 5
-        self.damage = 1
-
-    def random_move(self):
-        selector = random.randrange(1, 4)
-        if selector == 1:
-            return "strike"
-        elif selector == 2:
-            return "block"
-        elif selector == 3:
-            return "charge"
 
 
 
