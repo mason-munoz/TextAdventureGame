@@ -1,19 +1,25 @@
 from entities.player import Player
 from entities.enemy import Enemy
-from entities.room import Treasure
+from entities.treasure import Treasure
+from entities.merchant import Merchant
 
 def main():
     print("\n---- Welcome to the dungeon of object oriented programming! ----\n")
+    print("!    Note: Please ensure terminal window is large enough    !\n")
     player_name = input("What is your name: ").title().strip()
     print(f'\n   -- Welcome {player_name}! --')
-    print("! Note: Please ensure terminal window is large enough !")
+    
 
     player = Player(player_name)
+    merchant = Merchant()
 
 
     while True:
         print(player.current_room.name)
-        decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n ").lower().strip()
+        if player.current_room.name == "Merchant Room":
+            decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n - Talk to merchant(t)\n").lower().strip()
+        else:
+            decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n ").lower().strip()
         if (decision == "explore") or (decision == "e"):
             options = player.explore()
             direction = input(f'\nWhich way would you like to go:\n{options}').upper().strip()
@@ -40,10 +46,21 @@ def main():
 
             elif player.current_room.treasure == True:
                 treasure = Treasure()
-                treasure.open_treasure(player)
-                player.current_room.treasure = False
-                player.current_room.nothing = True
+                print("\n* A glowing chest sits in the middle of the room *")
+                treasure_decision = input("\nWould you like to open it?\n - Yes\n - No\n").lower().strip()
+                if treasure_decision == "yes" or decision == "y":
+                    treasure.open_treasure(player)
+                    player.current_room.treasure = False
+                    player.current_room.nothing = True
+                else:
+                    print("\n* You decide to ignore the chest (you can always come back for it later) *")
                 #"The empty chest sits in the middle of the room"
+
+            elif player.current_room.name == "Merchant Room":
+                print("\nYou have encountered a goblin merchant")
+                purchase_decision = input("Would you like to talk to him? (Y/N) ").lower().strip()
+                if purchase_decision == "y":
+                    merchant.display_items(player)
 
             elif player.current_room.nothing == True:
                 print("The room is empty")
@@ -52,6 +69,9 @@ def main():
         
         elif (decision == "check inventory") or (decision == "inventory") or (decision == "i"):
             player.check_inventory()
+        
+        elif (decision == "talk to merchant") or (decision == "talk") or (decision == "t"):
+            merchant.display_items(player)
 
         else:
             print("\n-- Please select a valid choice -- ")

@@ -8,6 +8,9 @@ class Player:
         self.armor = ("", 0)
         self.inventory = ["Rusty dagger"]
         self.gold = 0
+        self.map = False
+        self.torch = False
+        self.key = False
 
         self.max_health = (10 + self.armor[1])
         self.health = self.max_health
@@ -95,6 +98,8 @@ class Player:
     
     def heal(self):
         self.health = self.max_health
+        print("* You have been healed to full health! *")
+        print(f'You now have {self.health}/{self.max_health} health\n')
     
     def update_weapon(self, new_weapon):
         self.inventory.remove(self.weapon[0])
@@ -116,6 +121,9 @@ class Player:
 
     def add_inventory(self, item):
         self.inventory.append(item)
+
+    def display_gold(self):
+        print(f'\nYou now have {self.gold} gold!')
 
     
 
