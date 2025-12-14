@@ -2,6 +2,8 @@ from entities.player import Player
 from entities.enemy import Enemy
 from entities.treasure import Treasure
 from entities.merchant import Merchant
+from .world import world_map
+from entities import room
 
 def main():
     print("\n---- Welcome to the dungeon of object oriented programming! ----\n")
@@ -16,7 +18,12 @@ def main():
 
     while True:
         print(player.current_room.name)
-        if player.current_room.name == "Merchant Room":
+        if player.map == True:
+            if player.current_room.name == "Merchant Room":
+                decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n - View map(m)\n - Talk to merchant(t)\n").lower().strip()
+            else:
+                decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n - View map(m)\n").lower().strip()
+        elif player.current_room.name == "Merchant Room":
             decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n - Talk to merchant(t)\n").lower().strip()
         else:
             decision = input("\nWhat would you like to do?\n - Explore (e)\n - Check inventory (i)\n ").lower().strip()
@@ -42,13 +49,15 @@ def main():
                 battle(player)
                 player.current_room.enemy = False
                 player.current_room.nothing = True
+                if player.enemy_counter == 0:
+                    room.enemy_reset(player)
                 #"Enemy remains are splattered across the dungeon walls"
 
             elif player.current_room.treasure == True:
                 treasure = Treasure()
                 print("\n* A glowing chest sits in the middle of the room *")
-                treasure_decision = input("\nWould you like to open it?\n - Yes\n - No\n").lower().strip()
-                if treasure_decision == "yes" or decision == "y":
+                treasure_decision = input("\nWould you like to open it? (Y/N)").lower().strip()
+                if treasure_decision == "yes" or treasure_decision == "y":
                     treasure.open_treasure(player)
                     player.current_room.treasure = False
                     player.current_room.nothing = True
@@ -70,7 +79,10 @@ def main():
         elif (decision == "check inventory") or (decision == "inventory") or (decision == "i"):
             player.check_inventory()
         
-        elif (decision == "talk to merchant") or (decision == "talk") or (decision == "t"):
+        elif (decision == "view map" or decision == "m") and (player.map == True):
+            world_map(player)
+
+        elif ((decision == "talk to merchant") or (decision == "talk") or (decision == "t")) and (player.current_room.name == "Merchant Room"):
             merchant.display_items(player)
 
         else:
@@ -86,28 +98,19 @@ def battle(player):
             print("\n")
             player.strike(enemy)
 
-            if enemy.health <= 0:
-                print(f'You have killed the enemy!\n *You gained 1 gold!*\n')
-                player.gold += 1
-                print(f'You now have {player.gold} gold!\n')
-                break
             
         elif (battle == "block") or (battle == "b"):
             print("\n")
             player.block(enemy)
 
-            if enemy.health <= 0:
-                print(f'You have killed the enemy!\n *You gained 1 gold!*\n')
-                player.gold += 1
-                print(f'You now have {player.gold} gold!\n')
-                break
         
         elif (battle == "charge") or (battle == "c"):
             print("\n")
             player.charge(enemy)
-
-            if enemy.health <= 0:
+        
+        if enemy.health <= 0:
                 print(f'You have killed the enemy!\n *You gained 1 gold!*\n')
+                player.enemy_counter -= 1
                 player.gold += 1
                 print(f'You now have {player.gold} gold!\n')
                 break

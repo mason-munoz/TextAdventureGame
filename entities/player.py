@@ -16,7 +16,7 @@ class Player:
         self.health = self.max_health
         self.damage = self.weapon[1]
         
-        
+        self.enemy_counter = 2
         self.current_room = room.start_room
 
     
@@ -109,7 +109,7 @@ class Player:
         print(f'\nYour damage increased to {self.damage}!\n')
 
     def update_armor(self, new_armor):
-        if self.armor in self.inventory:
+        if self.armor[0] in self.inventory:
             self.inventory.remove(self.armor[0])
         self.health += (new_armor[1] - self.armor[1])
         self.armor = new_armor

@@ -17,6 +17,6 @@ class Enemy:
 class Boss(Enemy):
     def __init__(self):
         super().__init__()
-        self.health = 20
-        self.damage = 5
+        self.health = 10
+        self.damage = 3
         self.special_move = "sweep"

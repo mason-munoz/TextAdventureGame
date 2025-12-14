@@ -99,7 +99,7 @@ class Merchant:
                         else:
                             continue
                     else:
-                        print(f'! Error: This {defense} is weaker than your current {player.armor[0]} !')
+                        print(f'\n! Error: This {defense} is weaker than your current {player.armor[0]} !')
                 else:
                     print("\n! Error: You dont have enough gold to purchase this item !")
 
