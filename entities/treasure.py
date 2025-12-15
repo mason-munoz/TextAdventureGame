@@ -13,7 +13,7 @@ class Treasure():
             self.defensive_item = random.choice(defenselist)
 
     def open_treasure(self, player):
-        print("\n* You open the chest in a burst of light *")
+        print("\n\n\n-- You open the chest in a burst of light --")
         print(f'\nBefore you lies a {self.weapon[0]}, {self.defensive_item[0]}, and {self.gold} gold!\n')
 
         if player.damage < self.weapon[1]:

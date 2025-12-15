@@ -29,7 +29,6 @@ class Merchant:
                     if confirmation == "y":
                         print("\n* You successfully purchased the Torch *")
                         player.inventory.append("Torch")
-                        player.torch = True
                         player.gold -= self.items["Torch"]
                         player.display_gold()
                         self.items.pop("Torch")
@@ -58,7 +57,6 @@ class Merchant:
                     if confirmation == "y":
                         print("\n* You successfully purchased the Map *")
                         player.inventory.append("Map")
-                        player.map = True
                         player.gold -= self.items["Map"]
                         player.display_gold()
                         self.items.pop("Map")
